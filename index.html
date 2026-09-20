@@ -1,0 +1,918 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Soul Cauldron • Tiên Đồ Cẩm Nang</title>
+<style>
+:root{
+  --bg:#06070b; --bg2:#0c0f17; --panel:rgba(16,20,32,.72); --panel2:rgba(25,31,48,.78);
+  --line:rgba(255,255,255,.09); --text:#eef1ff; --muted:#9da7c2; --gold:#e9c56b;
+  --violet:#8a73ff; --cyan:#67e8f9; --danger:#ff5878; --green:#65e7a1;
+  --shadow:0 24px 70px rgba(0,0,0,.35); --radius:22px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{
+  margin:0; color:var(--text); font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(138,115,255,.18), transparent 28%),
+    radial-gradient(circle at 85% 12%, rgba(103,232,249,.13), transparent 25%),
+    radial-gradient(circle at 50% 80%, rgba(233,197,107,.08), transparent 30%),
+    linear-gradient(180deg,#05060a 0%,#090c13 55%,#06070b 100%);
+  min-height:100vh;
+}
+body::before{
+  content:""; position:fixed; inset:0; pointer-events:none; opacity:.18;
+  background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:48px 48px; mask-image:linear-gradient(to bottom,black,transparent 80%);
+}
+a{color:inherit;text-decoration:none}
+button,input{font:inherit}
+button{cursor:pointer}
+.app{display:grid;grid-template-columns:290px minmax(0,1fr);min-height:100vh}
+.sidebar{
+  position:sticky; top:0; height:100vh; padding:24px 18px; border-right:1px solid var(--line);
+  background:rgba(5,7,12,.78); backdrop-filter:blur(22px); z-index:20; overflow:auto;
+}
+.brand{padding:10px 10px 22px}
+.brand-mark{width:52px;height:52px;border:1px solid rgba(233,197,107,.3);border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(233,197,107,.18),rgba(138,115,255,.13));box-shadow:0 12px 35px rgba(233,197,107,.08);font-size:25px}
+.brand h1{font-size:20px;margin:14px 0 4px;letter-spacing:-.02em}
+.brand p{font-size:12px;color:var(--muted);line-height:1.55;margin:0}
+.nav{display:grid;gap:8px}
+.nav button{border:1px solid transparent;background:transparent;color:var(--muted);padding:11px 12px;border-radius:13px;text-align:left;transition:.2s;display:flex;gap:10px;align-items:center}
+.nav button:hover,.nav button.active{background:rgba(255,255,255,.055);border-color:var(--line);color:var(--text);transform:translateX(2px)}
+.side-foot{margin-top:24px;padding:14px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.025);font-size:11px;color:var(--muted);line-height:1.55}
+.main{min-width:0;padding:28px 30px 70px}
+.container{max-width:1450px;margin:0 auto}
+.hero{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(320px,.75fr);gap:18px;align-items:stretch;margin-bottom:20px}
+.hero-card,.panel,.command-card,.realm-card,.stat,.chat-window,.note{border:1px solid var(--line);background:var(--panel);box-shadow:var(--shadow);backdrop-filter:blur(18px)}
+.hero-card{border-radius:28px;padding:34px;position:relative;overflow:hidden}
+.hero-card::after{content:"";position:absolute;width:310px;height:310px;border-radius:50%;right:-100px;top:-140px;background:radial-gradient(circle,rgba(138,115,255,.32),transparent 68%);filter:blur(8px);pointer-events:none}
+.eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#cfd4e7}
+.hero h2{font-size:clamp(36px,5vw,66px);line-height:.96;margin:14px 0 14px;letter-spacing:-.055em;max-width:820px}
+.hero h2 span{background:linear-gradient(120deg,#fff,#d4c8ff 40%,#e9c56b);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-copy{color:var(--muted);max-width:760px;line-height:1.7;margin:0}
+.pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.pill{padding:8px 11px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.035);font-size:12px;color:#c9d0e5}
+.hero-side{display:grid;grid-template-rows:1fr auto;gap:18px}
+.realm-focus{border-radius:24px;padding:24px;background:linear-gradient(145deg,rgba(138,115,255,.13),rgba(233,197,107,.08));border:1px solid rgba(255,255,255,.09)}
+.realm-focus .big{font-size:34px;font-weight:800;letter-spacing:-.04em;margin:6px 0}
+.realm-focus p{margin:6px 0;color:var(--muted);font-size:13px;line-height:1.6}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.stat{padding:18px;border-radius:18px}
+.stat strong{display:block;font-size:24px;letter-spacing:-.04em}
+.stat span{display:block;color:var(--muted);font-size:11px;margin-top:5px}
+.panel{border-radius:24px;padding:20px;margin-top:18px}
+.section-head{display:flex;justify-content:space-between;gap:14px;align-items:end;margin-bottom:14px}
+.section-head h3{margin:0;font-size:24px;letter-spacing:-.035em}
+.section-head p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.tools{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 16px}
+.search{flex:1 1 320px;position:relative}
+.search input{width:100%;background:rgba(0,0,0,.18);border:1px solid var(--line);outline:none;color:var(--text);padding:13px 15px;border-radius:14px}
+.search input:focus{border-color:rgba(138,115,255,.45);box-shadow:0 0 0 4px rgba(138,115,255,.08)}
+.filter-row{display:flex;gap:7px;flex-wrap:wrap}
+.filter{border:1px solid var(--line);background:rgba(255,255,255,.025);color:var(--muted);padding:10px 12px;border-radius:12px;font-size:12px}
+.filter.active,.filter:hover{color:var(--text);background:rgba(138,115,255,.12);border-color:rgba(138,115,255,.28)}
+.realm-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.realm-card{border-radius:18px;padding:17px;position:relative;overflow:hidden;transition:transform .18s ease,border-color .18s}
+.realm-card:hover{transform:translateY(-3px);border-color:rgba(233,197,107,.25)}
+.realm-card::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.04),transparent 42%);pointer-events:none}
+.realm-num{font-size:10px;color:var(--muted);letter-spacing:.11em;text-transform:uppercase}
+.realm-name{font-size:17px;font-weight:800;margin:9px 0 13px;line-height:1.15}
+.realm-meta{display:grid;gap:7px}
+.realm-meta div{display:flex;justify-content:space-between;gap:10px;padding-bottom:7px;border-bottom:1px dashed rgba(255,255,255,.07);font-size:11px}
+.realm-meta div:last-child{border-bottom:0;padding-bottom:0}
+.realm-meta span{color:var(--muted)}
+.realm-meta b{font-weight:700}
+.realm-bar{height:4px;border-radius:999px;background:rgba(255,255,255,.06);margin-top:12px;overflow:hidden}
+.realm-bar i{display:block;height:100%;width:var(--w);background:linear-gradient(90deg,#8a73ff,#e9c56b);border-radius:inherit}
+.command-table-wrap{overflow:auto;border:1px solid var(--line);border-radius:18px}
+table{width:100%;border-collapse:collapse;min-width:980px}
+th,td{padding:13px 14px;border-bottom:1px solid rgba(255,255,255,.055);vertical-align:top}
+th{position:sticky;top:0;background:#101523;color:#bfc7db;font-size:11px;text-transform:uppercase;letter-spacing:.09em;text-align:left;z-index:2}
+td{font-size:12px;color:#dfe4f2}
+tr:hover td{background:rgba(255,255,255,.02)}
+.cmd{font-family:"SFMono-Regular",Consolas,monospace;color:#f2d997;background:rgba(233,197,107,.07);padding:5px 7px;border-radius:8px;display:inline-block}
+.alias{color:#8f9ab8;font-family:"SFMono-Regular",Consolas,monospace}
+.badge{display:inline-flex;padding:5px 8px;border-radius:999px;font-size:10px;border:1px solid var(--line);background:rgba(255,255,255,.035);color:#bfc7da;white-space:nowrap}
+.badge.admin{color:#ffafbd;border-color:rgba(255,88,120,.24);background:rgba(255,88,120,.07)}
+.badge.owner{color:#f3d78e;border-color:rgba(233,197,107,.25);background:rgba(233,197,107,.08)}
+.badge.user{color:#91f0c0;border-color:rgba(101,231,161,.2);background:rgba(101,231,161,.06)}
+.empty{padding:30px;text-align:center;color:var(--muted)}
+.slash-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.slash-item{border:1px solid var(--line);border-radius:16px;padding:15px;background:rgba(255,255,255,.022);display:grid;grid-template-columns:auto 1fr;gap:12px}
+.slash-item .mark{width:37px;height:37px;border-radius:12px;display:grid;place-items:center;background:rgba(138,115,255,.12);border:1px solid rgba(138,115,255,.2)}
+.slash-item strong{display:block}
+.slash-item p{margin:6px 0 0;color:var(--muted);font-size:12px;line-height:1.55}
+.sim-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:15px}
+.chat-window{border-radius:22px;padding:18px;background:linear-gradient(180deg,rgba(12,16,26,.96),rgba(7,9,14,.96));min-height:420px}
+.chat-top{display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line);padding-bottom:13px;margin-bottom:16px}
+.avatar{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(135deg,#8a73ff,#4b3b9a);font-size:18px}
+.chat-title strong{display:block;font-size:13px}
+.chat-title span{font-size:11px;color:var(--muted)}
+.msg{display:grid;grid-template-columns:34px 1fr;gap:10px;margin:14px 0}
+.msg .av{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,.05);border:1px solid var(--line)}
+.bubble{background:#111725;border:1px solid rgba(255,255,255,.07);padding:12px 13px;border-radius:0 15px 15px 15px;font-size:12px;line-height:1.65}
+.bubble.bot{background:linear-gradient(135deg,rgba(138,115,255,.1),rgba(233,197,107,.06))}
+.bubble .accent{color:#e9c56b}
+.example-list{display:grid;gap:9px}
+.example-btn{text-align:left;border:1px solid var(--line);background:rgba(255,255,255,.028);color:var(--text);padding:12px;border-radius:14px}
+.example-btn:hover,.example-btn.active{background:rgba(138,115,255,.1);border-color:rgba(138,115,255,.25)}
+.note{padding:16px 18px;border-radius:17px;color:#bac3d8;font-size:12px;line-height:1.65}
+.note b{color:#eef1ff}
+.footer{margin-top:22px;color:#717a91;font-size:11px;text-align:center}
+dialog{border:1px solid var(--line);border-radius:22px;background:#0d111c;color:var(--text);width:min(720px,calc(100vw - 30px));padding:0;box-shadow:0 40px 120px rgba(0,0,0,.55)}
+dialog::backdrop{background:rgba(0,0,0,.62);backdrop-filter:blur(5px)}
+.modal{padding:22px}
+.modal-top{display:flex;justify-content:space-between;gap:10px;align-items:start}
+.icon-btn{border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--muted);border-radius:10px;width:35px;height:35px}
+.modal h3{margin:0 0 7px;font-size:22px}
+.modal p{color:var(--muted);line-height:1.7;font-size:13px}
+.codebox{padding:13px 14px;border:1px solid rgba(233,197,107,.15);background:rgba(233,197,107,.045);border-radius:12px;font-family:Consolas,monospace;color:#f3daa0;font-size:12px;white-space:pre-wrap}
+.mobile-head{display:none}
+@media(max-width:1150px){.realm-grid{grid-template-columns:repeat(3,1fr)} .hero{grid-template-columns:1fr} .sim-grid{grid-template-columns:1fr}}
+@media(max-width:860px){
+  .app{grid-template-columns:1fr} .sidebar{display:none} .mobile-head{display:flex;position:sticky;top:0;z-index:30;padding:12px 14px;background:rgba(5,7,12,.84);backdrop-filter:blur(20px);border-bottom:1px solid var(--line);align-items:center;justify-content:space-between}
+  .main{padding:18px 14px 50px} .realm-grid{grid-template-columns:repeat(2,1fr)} .stats{grid-template-columns:repeat(2,1fr)} .slash-grid{grid-template-columns:1fr}
+}
+@media(max-width:540px){
+  .hero-card{padding:23px} .hero h2{font-size:40px} .realm-grid{grid-template-columns:1fr} .stats{grid-template-columns:1fr 1fr} .section-head{align-items:start;flex-direction:column}
+}
+
+/* =========================
+   V3 — ASCENDED UI SYSTEM
+   ========================= */
+:root{
+  --ink:#04050a; --glass:rgba(12,16,28,.62); --glass-strong:rgba(18,23,39,.82);
+  --edge:rgba(255,255,255,.095); --edge-hi:rgba(233,197,107,.28);
+  --violet-2:#b9a6ff; --cyan-2:#78f2ff; --gold-2:#ffe7a3;
+  --ease:cubic-bezier(.22,.75,.18,1);
+}
+html{scroll-padding-top:90px}
+body{overflow-x:hidden;background:
+  radial-gradient(900px 500px at 18% 0%,rgba(104,82,255,.22),transparent 65%),
+  radial-gradient(700px 420px at 83% 8%,rgba(25,205,255,.14),transparent 68%),
+  radial-gradient(950px 700px at 50% 58%,rgba(209,165,64,.08),transparent 70%),
+  linear-gradient(145deg,#03050a 0%,#070a12 42%,#05060b 100%);
+}
+body:after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(circle at var(--mx,50%) var(--my,20%),rgba(155,130,255,.10),transparent 22%);transition:background .18s linear}
+::selection{background:rgba(138,115,255,.35);color:#fff}
+*{scrollbar-width:thin;scrollbar-color:rgba(138,115,255,.65) rgba(255,255,255,.035)}
+*::-webkit-scrollbar{width:10px;height:10px}
+*::-webkit-scrollbar-track{background:linear-gradient(90deg,rgba(255,255,255,.025),rgba(138,115,255,.035));border-radius:999px}
+*::-webkit-scrollbar-thumb{background:linear-gradient(180deg,rgba(138,115,255,.92),rgba(233,197,107,.8));border:2px solid rgba(7,9,15,.8);border-radius:999px;box-shadow:0 0 12px rgba(138,115,255,.24)}
+*::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,#b49fff,#ffe399)}
+.sidebar{box-shadow:18px 0 80px rgba(0,0,0,.22),inset -1px 0 0 rgba(255,255,255,.025)}
+.sidebar:before{content:"";position:absolute;inset:0 0 auto 0;height:160px;background:linear-gradient(180deg,rgba(138,115,255,.09),transparent);pointer-events:none}
+.brand-mark{position:relative;box-shadow:0 0 0 1px rgba(233,197,107,.08),0 12px 45px rgba(123,95,255,.26),inset 0 0 28px rgba(255,255,255,.05);animation:sealFloat 5s ease-in-out infinite}
+.brand-mark:after{content:"";position:absolute;inset:-7px;border:1px solid rgba(233,197,107,.16);border-radius:20px;transform:rotate(45deg);animation:orbital 12s linear infinite}
+.hero-card,.panel{position:relative;isolation:isolate;overflow:hidden}
+.hero-card:before,.panel:before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:linear-gradient(125deg,rgba(255,255,255,.10),transparent 30%,rgba(233,197,107,.14),transparent 72%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;opacity:.72}
+.hero-card{min-height:390px;background:linear-gradient(145deg,rgba(19,24,42,.78),rgba(7,10,18,.58));box-shadow:0 32px 110px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.03)}
+.hero-card:after{width:470px;height:470px;right:-160px;top:-220px;filter:blur(4px);opacity:.9;animation:aurora 10s ease-in-out infinite alternate}
+.hero-card .eyebrow{position:relative;z-index:2}
+.hero h2{position:relative;z-index:2;text-wrap:balance}
+.hero-copy{position:relative;z-index:2}
+.pill{backdrop-filter:blur(12px);transition:.25s var(--ease);box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
+.pill:hover{transform:translateY(-2px);border-color:rgba(233,197,107,.25);color:#fff;background:rgba(233,197,107,.07)}
+.hero-side .realm-focus{position:relative;overflow:hidden;box-shadow:0 20px 80px rgba(80,61,200,.14),inset 0 1px 0 rgba(255,255,255,.05)}
+.realm-focus:after{content:"";position:absolute;inset:-70%;background:conic-gradient(from 0deg,transparent 0 74%,rgba(233,197,107,.12) 80%,transparent 86%);animation:spinSlow 18s linear infinite;pointer-events:none}
+.realm-focus>*{position:relative;z-index:2}
+.stats .stat{position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(18,22,36,.75),rgba(10,13,22,.62));transition:.28s var(--ease);box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
+.stats .stat:after{content:"";position:absolute;inset:auto -35% -60% -35%;height:80px;background:radial-gradient(circle,rgba(138,115,255,.17),transparent 65%)}
+.stats .stat:hover{transform:translateY(-4px);border-color:rgba(138,115,255,.22);box-shadow:0 20px 45px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.05)}
+.panel{background:linear-gradient(145deg,rgba(13,18,31,.74),rgba(6,9,16,.60));box-shadow:0 25px 85px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.025)}
+.panel.reveal{opacity:0;transform:translateY(28px) scale(.985);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.panel.reveal.visible{opacity:1;transform:none}
+.section-head h3{display:flex;align-items:center;gap:10px}
+.section-head h3:before{content:"";width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,#e9c56b,#8a73ff);box-shadow:0 0 18px rgba(138,115,255,.55);animation:pulseDot 2.4s ease-in-out infinite}
+.tools{position:sticky;top:10px;z-index:12;padding:10px;border:1px solid rgba(255,255,255,.055);background:rgba(7,10,18,.70);border-radius:18px;backdrop-filter:blur(22px);box-shadow:0 14px 36px rgba(0,0,0,.20)}
+.search input{height:46px;border-radius:13px;background:rgba(4,6,11,.58);box-shadow:inset 0 1px 0 rgba(255,255,255,.03);transition:.24s}
+.search input:focus{transform:translateY(-1px);box-shadow:0 0 0 4px rgba(138,115,255,.09),0 12px 32px rgba(0,0,0,.22)}
+.filter{transition:.22s var(--ease);box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
+.filter:active{transform:scale(.97)}
+
+/* Realm horizontal deck */
+.realm-rail{position:relative;margin-top:6px}
+.realm-grid{display:flex;gap:15px;overflow-x:auto;overflow-y:hidden;padding:10px 8px 20px;scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain}
+.realm-grid .realm-card{flex:0 0 286px;min-height:245px;scroll-snap-align:start;background:
+  radial-gradient(260px 140px at 85% 10%,rgba(138,115,255,.13),transparent 70%),
+  linear-gradient(145deg,rgba(19,24,40,.88),rgba(8,11,19,.82));
+  box-shadow:0 18px 45px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.035);transition:transform .38s var(--ease),border-color .25s,box-shadow .25s;}
+.realm-card:hover{transform:translateY(-7px) rotateX(1deg);border-color:rgba(233,197,107,.30);box-shadow:0 25px 60px rgba(0,0,0,.30),0 0 35px rgba(102,78,210,.10)}
+.realm-card:after{content:"";position:absolute;inset:auto -30% -45% auto;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(233,197,107,.13),transparent 68%);filter:blur(3px)}
+.realm-name{min-height:38px}
+.realm-index-ring{position:absolute;top:16px;right:16px;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(233,197,107,.24);background:rgba(233,197,107,.045);color:var(--gold-2);font-size:11px;font-weight:800;box-shadow:inset 0 0 14px rgba(233,197,107,.06)}
+.rail-controls{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px}
+.rail-hint{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.rail-hint .wheel{width:28px;height:28px;border-radius:10px;border:1px solid var(--edge);display:grid;place-items:center;background:rgba(255,255,255,.03);animation:microFloat 3s ease-in-out infinite}
+.rail-buttons{display:flex;gap:8px}
+.rail-btn{width:38px;height:38px;border-radius:12px;border:1px solid var(--edge);background:rgba(255,255,255,.035);color:#d9dff1;transition:.22s var(--ease);box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
+.rail-btn:hover{transform:translateY(-2px);border-color:rgba(233,197,107,.28);background:rgba(233,197,107,.07);color:#fff}
+
+/* Command vault: compact 3-column layout + internal vertical scroll */
+.command-table-wrap{border:1px solid rgba(255,255,255,.06);border-radius:20px;padding:12px;background:linear-gradient(145deg,rgba(5,8,14,.74),rgba(17,21,34,.46));box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
+.command-vault{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-height:760px;overflow-y:auto;padding:3px 8px 8px 3px}
+.command-card{position:relative;min-height:150px;border-radius:17px;padding:16px;background:linear-gradient(145deg,rgba(21,26,43,.82),rgba(9,12,21,.76));transition:transform .28s var(--ease),border-color .24s,box-shadow .24s;cursor:pointer;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.025),0 12px 30px rgba(0,0,0,.16)}
+.command-card:before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(138,115,255,.08),transparent 36%,rgba(233,197,107,.04));opacity:.7}
+.command-card:after{content:"";position:absolute;right:-30px;top:-40px;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(138,115,255,.16),transparent 70%);filter:blur(5px)}
+.command-card:hover{transform:translateY(-5px) perspective(900px) rotateX(1.4deg);border-color:rgba(138,115,255,.28);box-shadow:0 20px 45px rgba(0,0,0,.26),0 0 28px rgba(138,115,255,.08)}
+.command-card>*{position:relative;z-index:1}
+.command-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;margin-bottom:12px}
+.command-name{font:800 14px/1.1 "SFMono-Regular",Consolas,monospace;color:#f4d997}
+.command-alias{font-size:10px;color:#75809a;margin-top:5px}
+.command-desc{font-size:11px;line-height:1.55;color:#b8c1d8;min-height:50px}
+.command-syntax{margin-top:11px;padding:8px 9px;border-radius:11px;background:rgba(0,0,0,.20);border:1px dashed rgba(255,255,255,.07);color:#dde3f4;font:11px/1.35 Consolas,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.command-card .badge{position:relative;z-index:2}
+.command-category-strip{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.command-category-strip span{font-size:9px;letter-spacing:.04em;text-transform:uppercase;color:#828ca4;padding:4px 6px;border-radius:7px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05)}
+.command-count{margin-left:auto;color:#8e98b0;font-size:11px}
+
+/* Slash command vault */
+.slash-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-height:520px;overflow:auto;padding:4px 7px 8px 3px}
+.slash-item{position:relative;overflow:hidden;min-height:110px;background:linear-gradient(145deg,rgba(19,24,40,.78),rgba(8,11,19,.70));transition:.3s var(--ease)}
+.slash-item:hover{transform:translateY(-4px);border-color:rgba(103,232,249,.20);box-shadow:0 18px 38px rgba(0,0,0,.23)}
+.slash-item .mark{color:#dcd4ff;box-shadow:inset 0 0 18px rgba(138,115,255,.08)}
+
+/* Simulation — Discord-faithful message preview */
+.sim-grid{grid-template-columns:minmax(0,1.45fr) minmax(250px,.55fr);gap:18px}
+.discord-stage{
+  padding:0;
+  min-height:520px;
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:14px;
+  background:#36393f;
+  box-shadow:0 20px 70px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.02);
+  overflow:hidden;
+}
+.discord-stage.sim-active{animation:discordStageIn .38s ease}
+.discord-feed{
+  min-height:520px;
+  padding:16px 0 24px;
+  background:#36393f;
+  color:#dbdee1;
+}
+.discord-row{position:relative;display:grid;grid-template-columns:42px minmax(0,1fr);gap:12px;padding:4px 22px 8px 18px}
+.discord-avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:20px;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.03)}
+.user-avatar{background:linear-gradient(145deg,#8f765d,#4b3f36);filter:saturate(.78)}
+.bot-avatar{background:linear-gradient(145deg,#5865f2,#1d9bf0);box-shadow:0 5px 17px rgba(88,101,242,.20)}
+.discord-body-copy{min-width:0}
+.discord-author{display:flex;align-items:center;gap:6px;line-height:1.25;min-height:20px}
+.discord-author b{font-size:13px;color:#f2f3f5}
+.discord-time{font-size:10px;color:#949ba4;font-weight:400}
+.discord-badge{font-size:9px;font-weight:800;background:#5865f2;color:#fff;padding:2px 4px;border-radius:3px;letter-spacing:.02em}
+.discord-command{margin-top:2px;font-size:14px;color:#f2f3f5;font-family:inherit}
+.discord-command code{font-family:Consolas,Monaco,monospace;background:transparent;color:#f2f3f5;padding:0}
+.discord-reply-context{display:flex;align-items:center;gap:7px;min-height:28px;padding-left:30px;margin:0 22px -1px 42px;color:#949ba4;font-size:11px;position:relative}
+.discord-reply-context:before{content:"";position:absolute;left:11px;top:10px;width:20px;height:10px;border-left:2px solid #4b4f56;border-top:2px solid #4b4f56;border-radius:10px 0 0 0}
+.reply-avatar{width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-size:10px;background:#4a4d55;color:#fff}
+.reply-name{color:#b5bac1;font-weight:600}.reply-handle{color:#949ba4}
+.discord-component{
+  margin-top:5px;
+  width:min(760px,100%);
+  background:#36393f;
+  border:1px solid #4a4d55;
+  border-left:4px solid var(--component-accent,#5865f2);
+  border-radius:10px;
+  padding:14px 16px 13px 16px;
+  box-shadow:0 2px 12px rgba(0,0,0,.14);
+}
+.component-title{font-size:18px;font-weight:800;color:#f2f3f5;letter-spacing:-.01em}
+.component-subtitle{margin-top:8px;color:#d5d7da;font-size:14px;font-style:italic;line-height:1.5}
+.component-separator{height:1px;background:#4a4d55;margin:13px 0}
+.component-block{border-left:4px solid #4a4d55;padding:2px 0 2px 14px;display:grid;gap:3px}
+.component-line{font-size:14px;line-height:1.55;color:#d6d8db}
+.component-line strong{color:#f2f3f5}.component-line code{background:#4a4d55;color:#e8eaed;border-radius:4px;padding:1px 4px;font:12px/1.3 Consolas,Monaco,monospace}
+.component-section-title{font-size:17px;font-weight:800;color:#f2f3f5;margin:1px 0 7px}
+.component-progress{margin-top:4px;height:21px;background:#4a4d55;border-radius:2px;overflow:hidden;position:relative;box-shadow:inset 0 1px 2px rgba(0,0,0,.18)}
+.component-progress span{display:block;height:100%;width:var(--progress,38%);background:linear-gradient(90deg,#dfe3e8,#bdc3cc);filter:saturate(.7)}
+.component-progress:after{content:attr(data-label);position:absolute;inset:0;display:grid;place-items:center;font-size:12px;color:#2f3136;font-weight:800}
+.component-note{font-size:14px;color:#d0d3d6;font-style:italic;line-height:1.55}
+.component-actions{display:none}
+.example-list{max-height:520px;overflow:auto;padding:4px 4px 4px 0}
+.example-btn{border-color:#43454b;background:#2f3136;color:#dbdee1;border-radius:8px;padding:13px;box-shadow:none}
+.example-btn:hover{transform:translateX(3px);background:#35373c;border-color:#5865f2}
+.example-btn.active{background:#3a3d45;border-color:#5865f2;box-shadow:inset 3px 0 0 #5865f2}
+/* Floating particles */
+#starfield{position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.9}
+.cursor-glow{position:fixed;left:0;top:0;width:170px;height:170px;margin:-85px 0 0 -85px;border-radius:50%;pointer-events:none;z-index:1;background:radial-gradient(circle,rgba(138,115,255,.11),transparent 65%);mix-blend-mode:screen;transition:transform .12s ease-out}
+
+/* Reveal / micro motion */
+.reveal-item{opacity:0;transform:translateY(18px) scale(.99);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal-item.visible{opacity:1;transform:none}
+
+@keyframes sealFloat{50%{transform:translateY(-4px) rotate(2deg)}100%{transform:none}}
+@keyframes orbital{to{transform:rotate(405deg)}}
+@keyframes aurora{0%{transform:translate3d(0,0,0) scale(1)}100%{transform:translate3d(-20px,16px,0) scale(1.08)}}
+@keyframes spinSlow{to{transform:rotate(360deg)}}
+@keyframes pulseDot{0%,100%{box-shadow:0 0 10px rgba(138,115,255,.35)}50%{box-shadow:0 0 22px rgba(233,197,107,.55)}}
+@keyframes microFloat{50%{transform:translateY(-3px)}}
+@keyframes chatGlow{0%{box-shadow:0 25px 80px rgba(0,0,0,.28)}50%{box-shadow:0 25px 90px rgba(83,58,198,.24)}100%{box-shadow:0 25px 80px rgba(0,0,0,.28)}}
+@keyframes messageIn{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes typing{0%,60%,100%{opacity:.25;transform:translateY(0)}30%{opacity:1;transform:translateY(-2px)}}
+@keyframes orbitPulse{50%{transform:scale(1.09);opacity:.35}}
+@keyframes starDrift{from{transform:translate3d(0,0,0);filter:brightness(.7)}to{transform:translate3d(16px,-22px,0);filter:brightness(1.6)}}
+
+@media(max-width:1150px){.command-vault{grid-template-columns:repeat(2,minmax(0,1fr))}.slash-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:860px){.tools{position:relative;top:auto}.command-vault{grid-template-columns:1fr;max-height:700px}.slash-grid{grid-template-columns:1fr}.realm-grid .realm-card{flex-basis:260px}.sim-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.001ms!important}}
+
+
+
+/* ===== zShinSJ identity + premium interface layer ===== */
+:root{
+  --z-bot-avatar:url("https://cdn.discordapp.com/avatars/1526618859644391505/17bec5b473bcf0d659ca175b257394dd.png?size=1024");
+  --invite:url("https://discord.com/oauth2/authorize?client_id=1526618859644391505");
+}
+.bot-identity{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  margin-top:18px;padding:12px 13px;border:1px solid rgba(110,190,255,.16);border-radius:18px;
+  background:linear-gradient(145deg,rgba(25,35,62,.74),rgba(8,13,24,.66));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.045),0 18px 44px rgba(0,0,0,.16);
+  position:relative;overflow:hidden;
+}
+.bot-identity:before{content:"";position:absolute;inset:-55%;background:conic-gradient(from 0deg,transparent 0 25%,rgba(92,181,255,.12) 31%,transparent 37% 68%,rgba(34,211,238,.08) 74%,transparent 80%);animation:spinSlow 16s linear infinite;pointer-events:none}
+.bot-identity > *{position:relative;z-index:1}
+.bot-id-left{display:flex;align-items:center;gap:11px;min-width:0}
+.bot-avatar-xl{width:50px;height:50px;border-radius:15px;object-fit:cover;display:block;border:1px solid rgba(126,214,255,.28);box-shadow:0 0 0 3px rgba(88,101,242,.10),0 10px 28px rgba(0,0,0,.28);background:#23283a}
+.bot-id-copy{min-width:0}.bot-id-copy strong{display:flex;align-items:center;gap:7px;font-size:15px;color:#fff;letter-spacing:-.01em}.bot-id-copy p{margin:3px 0 0;color:#9ba9c4;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.online-dot{width:7px;height:7px;border-radius:999px;background:#23d69a;box-shadow:0 0 10px rgba(35,214,154,.75);animation:pulseDot 1.9s ease-in-out infinite}
+.hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.cta-button,.ghost-button{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;padding:0 15px;border-radius:13px;
+  font-size:12px;font-weight:800;letter-spacing:.01em;transition:.22s var(--ease);border:1px solid transparent;
+}
+.cta-button{background:linear-gradient(135deg,#5865f2 0%,#4da3ff 52%,#22d3ee 100%);color:#fff;box-shadow:0 12px 30px rgba(45,137,255,.24),inset 0 1px 0 rgba(255,255,255,.24)}
+.cta-button:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(45,137,255,.34),0 0 0 5px rgba(77,163,255,.08)}
+.ghost-button{background:rgba(255,255,255,.035);border-color:rgba(110,190,255,.15);color:#cfe7ff}
+.ghost-button:hover{transform:translateY(-2px);background:rgba(77,163,255,.09);border-color:rgba(110,190,255,.30)}
+.sidebar-bot-card{margin:16px 0 4px;padding:13px;border:1px solid rgba(110,190,255,.12);border-radius:17px;background:linear-gradient(145deg,rgba(88,101,242,.08),rgba(34,211,238,.035));position:relative;overflow:hidden}
+.sidebar-bot-card:after{content:"";position:absolute;right:-35px;top:-35px;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(34,211,238,.18),transparent 70%);pointer-events:none}
+.sidebar-bot-head{display:flex;align-items:center;gap:10px}.sidebar-bot-avatar{width:34px;height:34px;border-radius:11px;object-fit:cover;border:1px solid rgba(125,211,252,.22)}
+.sidebar-bot-copy strong{font-size:12px;color:#f5f7ff}.sidebar-bot-copy span{display:block;font-size:9px;color:#7f91af;margin-top:2px}
+.sidebar-invite{margin-top:10px;width:100%;display:flex;align-items:center;justify-content:center;gap:7px;min-height:34px;border-radius:10px;border:1px solid rgba(88,101,242,.25);background:linear-gradient(135deg,rgba(88,101,242,.13),rgba(34,211,238,.06));color:#dff4ff;font-size:10px;font-weight:800;transition:.2s ease}
+.sidebar-invite:hover{transform:translateY(-1px);border-color:rgba(77,163,255,.42);box-shadow:0 10px 24px rgba(0,0,0,.14);background:linear-gradient(135deg,rgba(88,101,242,.23),rgba(34,211,238,.10))}
+.mobile-head{gap:10px}.mobile-brand{display:flex;align-items:center;gap:8px}.mobile-brand img{width:28px;height:28px;border-radius:9px;object-fit:cover}.mobile-head .mobile-invite{margin-left:auto;padding:8px 10px;border-radius:9px;background:#5865f2;color:#fff;font-size:10px;font-weight:800}
+.hero-status-row{display:flex;align-items:center;gap:8px;margin-top:11px;color:#8190ac;font-size:10px}.hero-status-row .live-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;border-radius:999px;border:1px solid rgba(35,214,154,.18);background:rgba(35,214,154,.055);color:#9fe9cb;font-weight:700}.hero-status-row .live-pill i{width:6px;height:6px;border-radius:50%;background:#23d69a;box-shadow:0 0 9px rgba(35,214,154,.75)}
+.hero-card{box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 28px 90px rgba(0,0,0,.30),0 0 0 1px rgba(110,190,255,.04)}
+.panel{box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 25px 72px rgba(0,0,0,.22)}
+.panel:hover{border-color:rgba(110,190,255,.14)}
+.section-head h3{display:flex;align-items:center;gap:9px}.section-head h3:after{content:"";flex:0 0 34px;height:1px;background:linear-gradient(90deg,rgba(103,232,249,.45),transparent)}
+.command-card,.slash-item,.realm-card,.stat,.note{transition:transform .24s var(--ease),border-color .24s ease,box-shadow .24s ease,background .24s ease}
+.command-card:hover{transform:translateY(-5px) rotateX(.4deg)}
+.slash-item:hover{transform:translateY(-5px)}
+.stat:hover,.note:hover{transform:translateY(-2px)}
+.rail-btn,.filter,.icon-btn,.example-btn,.search input,.nav button{transition:all .2s var(--ease)}
+.rail-btn:active,.filter:active,.cta-button:active,.ghost-button:active,.sidebar-invite:active{transform:translateY(1px) scale(.98)}
+.discord-avatar.bot-avatar{background:#23263a;position:relative}
+.discord-avatar.bot-avatar img{width:100%;height:100%;display:block;object-fit:cover;border-radius:inherit}
+.discord-avatar.bot-avatar:after{content:"";position:absolute;right:-1px;bottom:-1px;width:10px;height:10px;border-radius:50%;background:#23d69a;border:2px solid #313338;box-shadow:0 0 8px rgba(35,214,154,.55)}
+.discord-author b.bot-name{color:#fff}
+.bot-tag{box-shadow:0 2px 7px rgba(88,101,242,.25)}
+@media(max-width:860px){.bot-identity{align-items:flex-start}.hero-actions{margin-top:16px}.sidebar-bot-card{display:none}}
+
+/* ===== vNext visual layer: blue/azure dominant, animated cultivation background ===== */
+:root{
+  --blue:#5865F2;
+  --blue-2:#4da3ff;
+  --blue-3:#7dd3fc;
+  --azure:#22d3ee;
+  --indigo:#6366f1;
+  --gold-2:#f1d48a;
+  --edge:rgba(105,178,255,.18);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+html{background:#080b12}
+body{
+  overflow-x:hidden;
+  background:
+    radial-gradient(circle at 10% 7%, rgba(88,101,242,.20), transparent 27%),
+    radial-gradient(circle at 88% 14%, rgba(34,211,238,.13), transparent 23%),
+    radial-gradient(circle at 52% 56%, rgba(77,163,255,.07), transparent 32%),
+    linear-gradient(180deg,#070a11 0%,#0a0e17 48%,#070a11 100%);
+}
+body:after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
+  background:radial-gradient(circle at var(--mx,50%) var(--my,20%),rgba(88,101,242,.055),transparent 26%);
+}
+.app,.mobile-head{position:relative;z-index:2}
+#starfield{z-index:1;overflow:hidden;opacity:1}
+.falling-emoji{
+  position:absolute;top:-12vh;left:var(--x);font-size:var(--size);line-height:1;
+  opacity:var(--o);filter:drop-shadow(0 0 12px rgba(77,163,255,.25));
+  animation:emojiFall var(--duration) linear infinite;
+  animation-delay:var(--delay);transform:translate3d(0,-12vh,0) rotate(0deg);
+  will-change:transform,opacity;
+  user-select:none;
+}
+.sidebar{
+  background:linear-gradient(180deg,rgba(7,11,20,.90),rgba(7,10,17,.84));
+  border-right-color:rgba(100,170,255,.13);
+  box-shadow:18px 0 70px rgba(0,0,0,.22),inset -1px 0 0 rgba(255,255,255,.025);
+}
+.brand-mark{
+  border-color:rgba(88,101,242,.40);
+  background:radial-gradient(circle at 30% 20%,rgba(125,211,252,.25),transparent 42%),linear-gradient(135deg,rgba(88,101,242,.27),rgba(34,211,238,.12));
+  box-shadow:0 12px 35px rgba(88,101,242,.17),inset 0 1px 0 rgba(255,255,255,.06);
+}
+.brand h1{background:linear-gradient(90deg,#fff,#b8c7ff 58%,#8fe8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.nav button{position:relative}
+.nav button:before{content:"";width:3px;height:0;position:absolute;left:0;top:50%;transform:translateY(-50%);border-radius:99px;background:linear-gradient(#63a5ff,#22d3ee);transition:.24s var(--ease)}
+.nav button:hover:before,.nav button.active:before{height:55%}
+.nav button:hover,.nav button.active{background:linear-gradient(90deg,rgba(88,101,242,.12),rgba(34,211,238,.03));border-color:rgba(88,101,242,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.025),0 8px 22px rgba(0,0,0,.12)}
+.side-foot{border-color:rgba(77,163,255,.14);background:linear-gradient(145deg,rgba(88,101,242,.07),rgba(255,255,255,.02))}
+.hero-card{background:
+  radial-gradient(520px 300px at 85% 16%,rgba(88,101,242,.18),transparent 72%),
+  radial-gradient(420px 240px at 38% 88%,rgba(34,211,238,.07),transparent 74%),
+  linear-gradient(145deg,rgba(16,23,42,.85),rgba(7,10,18,.67));
+}
+.hero h2 span{background:linear-gradient(105deg,#fff 0%,#b5c4ff 38%,#7dd3fc 72%,#f1d48a 100%);-webkit-background-clip:text;background-clip:text}
+.hero-card:after{background:radial-gradient(circle,rgba(88,101,242,.33),rgba(34,211,238,.12) 30%,transparent 70%)}
+.realm-focus{background:linear-gradient(145deg,rgba(88,101,242,.16),rgba(34,211,238,.06),rgba(233,197,107,.05));border-color:rgba(88,101,242,.20)}
+.realm-focus .big{background:linear-gradient(90deg,#fff,#b9c7ff,#72e7ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stats .stat:hover{border-color:rgba(77,163,255,.27);box-shadow:0 20px 45px rgba(0,0,0,.22),0 0 24px rgba(77,163,255,.08)}
+.section-head h3:before{background:linear-gradient(135deg,#7dd3fc,#5865f2,#e9c56b);box-shadow:0 0 20px rgba(77,163,255,.50)}
+.tools{border-color:rgba(77,163,255,.12);background:rgba(8,12,22,.80)}
+.search input:focus{border-color:rgba(77,163,255,.42);box-shadow:0 0 0 4px rgba(77,163,255,.08),0 12px 32px rgba(0,0,0,.22)}
+.filter{border-color:rgba(77,163,255,.11)}
+.filter.active,.filter:hover{background:linear-gradient(135deg,rgba(88,101,242,.17),rgba(34,211,238,.06));border-color:rgba(77,163,255,.27);color:#fff;box-shadow:0 7px 18px rgba(0,0,0,.14)}
+/* scrollbars */
+*{scrollbar-width:thin;scrollbar-color:#536bf5 rgba(255,255,255,.045)}
+*::-webkit-scrollbar{width:10px;height:10px}
+*::-webkit-scrollbar-track{background:rgba(7,10,17,.78);border-radius:99px}
+*::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#5865f2,#2596ff 60%,#22d3ee);border-radius:99px;border:2px solid rgba(7,10,17,.78);box-shadow:0 0 16px rgba(88,101,242,.25)}
+*::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,#7180ff,#45b2ff 60%,#57e6ff)}
+.realm-grid{padding-bottom:24px;scrollbar-color:#5865f2 rgba(255,255,255,.06)}
+.realm-grid::-webkit-scrollbar{height:12px}
+.realm-grid::-webkit-scrollbar-thumb{background:linear-gradient(90deg,#5865f2,#4da3ff,#22d3ee,#e9c56b)}
+.realm-grid .realm-card{
+  background:radial-gradient(290px 150px at 88% 8%,rgba(88,101,242,.18),transparent 72%),
+             radial-gradient(230px 160px at 12% 92%,rgba(34,211,238,.07),transparent 70%),
+             linear-gradient(145deg,rgba(15,22,39,.92),rgba(7,11,20,.87));
+  border-color:rgba(100,160,255,.12);
+}
+.realm-grid .realm-card:nth-child(3n+1){border-color:rgba(103,232,249,.11)}
+.realm-grid .realm-card:nth-child(3n+2){border-color:rgba(88,101,242,.14)}
+.realm-grid .realm-card:nth-child(3n){border-color:rgba(233,197,107,.12)}
+.realm-card:hover{border-color:rgba(103,190,255,.35);box-shadow:0 28px 65px rgba(0,0,0,.30),0 0 34px rgba(77,163,255,.10)}
+.realm-index-ring{border-color:rgba(103,190,255,.27);background:rgba(77,163,255,.055);color:#a8dfff;box-shadow:inset 0 0 14px rgba(77,163,255,.08),0 0 14px rgba(77,163,255,.08)}
+.realm-bar i{background:linear-gradient(90deg,#5865f2,#4da3ff,#22d3ee,#e9c56b)}
+.rail-btn{border-color:rgba(77,163,255,.16);background:linear-gradient(145deg,rgba(88,101,242,.10),rgba(255,255,255,.025));box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 7px 20px rgba(0,0,0,.13)}
+.rail-btn:hover{border-color:rgba(103,190,255,.38);background:linear-gradient(145deg,rgba(88,101,242,.20),rgba(34,211,238,.08));box-shadow:0 0 22px rgba(77,163,255,.10);color:#fff}
+.command-table-wrap{border-color:rgba(77,163,255,.10);background:linear-gradient(145deg,rgba(5,9,18,.82),rgba(11,18,32,.52))}
+.command-card{background:linear-gradient(145deg,rgba(16,24,43,.90),rgba(7,11,20,.84));border-color:rgba(88,101,242,.10);box-shadow:inset 0 1px 0 rgba(255,255,255,.025),0 15px 34px rgba(0,0,0,.18)}
+.command-card:before{background:linear-gradient(135deg,rgba(88,101,242,.12),transparent 38%,rgba(34,211,238,.055))}
+.command-card:after{background:radial-gradient(circle,rgba(34,211,238,.13),rgba(88,101,242,.05) 45%,transparent 72%)}
+.command-card:hover{border-color:rgba(77,163,255,.34);box-shadow:0 22px 50px rgba(0,0,0,.27),0 0 30px rgba(77,163,255,.09)}
+.command-name{color:#d7e5ff}
+.command-syntax{border-color:rgba(77,163,255,.11);background:rgba(2,5,10,.30);color:#cae4ff}
+.command-category-strip span{border-color:rgba(77,163,255,.08);background:rgba(77,163,255,.035);color:#8ea3c4}
+.badge.user{color:#9bcaff;border-color:rgba(77,163,255,.22);background:rgba(77,163,255,.065)}
+.slash-grid{scrollbar-color:#4da3ff rgba(255,255,255,.04)}
+.slash-item:hover{border-color:rgba(103,232,249,.34);box-shadow:0 18px 38px rgba(0,0,0,.23),0 0 24px rgba(34,211,238,.07)}
+/* Discord simulation */
+.discord-stage{padding:0;background:#313338;border:1px solid #1f2024;border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.28);overflow:hidden;min-height:520px}
+.discord-stage:before{display:none}
+.discord-stage.sim-active{animation:discordStageIn .55s ease}
+.discord-channelbar{height:58px;padding:0 16px;border-bottom:1px solid #25262b;background:#2b2d31;display:flex;align-items:center;justify-content:space-between;color:#dbdee1;box-shadow:0 1px 0 rgba(255,255,255,.02)}
+.channel-left{display:flex;align-items:center;gap:8px;min-width:0}.channel-left .hash{font-size:23px;color:#949ba4;line-height:1}.channel-left strong{font-size:15px}.channel-topic{font-size:12px;color:#949ba4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.channel-icons{display:flex;gap:14px;color:#b5bac1;font-size:14px}
+.discord-body{background:#313338;min-height:462px;padding:18px 18px 32px}
+.discord-welcome{margin:12px 0 24px;padding-bottom:17px;border-bottom:1px solid #3f4147;display:grid;gap:5px}.discord-welcome-icon{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#5865f2;color:#fff;font-size:20px;box-shadow:0 5px 16px rgba(88,101,242,.24)}.discord-welcome strong{font-size:18px;color:#f2f3f5;margin-top:8px}.discord-welcome span{font-size:12px;color:#b5bac1}
+.discord-message{display:grid;grid-template-columns:42px minmax(0,1fr);gap:12px;padding:5px 0 13px}.discord-avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:20px;overflow:hidden}.user-avatar{background:#41444b}.bot-avatar{background:linear-gradient(135deg,#5865f2,#4da3ff);box-shadow:0 6px 18px rgba(88,101,242,.22)}
+.discord-message-content{min-width:0}.discord-author{display:flex;align-items:center;gap:7px;line-height:1.2}.discord-author b{font-size:13px;color:#f2f3f5}.discord-time{font-size:10px;color:#949ba4}.bot-tag{font-size:9px;font-weight:800;background:#5865f2;color:#fff;padding:2px 4px;border-radius:3px;letter-spacing:.04em}.discord-text{font-size:13px;color:#dbdee1;margin-top:5px}.discord-text code{background:#2b2d31;padding:3px 6px;border-radius:4px;color:#c9cdfb;font-family:Consolas,monospace}
+.discord-component{margin-top:8px;width:min(620px,100%);border-left:4px solid var(--component-accent);background:#2b2d31;border-radius:6px;padding:14px 15px;box-shadow:0 4px 16px rgba(0,0,0,.18)}
+.component-title{font-weight:700;font-size:14px;color:#f2f3f5}.component-rule{height:1px;background:#3f4147;margin:11px 0}.component-content{display:grid;gap:5px}.component-typing{display:flex;gap:4px;padding:7px 0}.component-typing i{width:5px;height:5px;border-radius:50%;background:#b5bac1;animation:typing 1s infinite}.component-typing i:nth-child(2){animation-delay:.15s}.component-typing i:nth-child(3){animation-delay:.3s}.discord-component-section{display:flex;gap:7px;align-items:center;color:#f2f3f5;font-size:11px;margin-bottom:5px}.discord-component-section span{font-size:14px}.discord-stat-row{display:flex;justify-content:space-between;gap:18px;font-size:11px;line-height:1.7}.discord-stat-row span{color:#b5bac1}.discord-stat-row b{color:#f2f3f5;font-weight:600;text-align:right}.icon-row i{font-style:normal;margin-right:7px}.component-footer{font-size:10px;color:#949ba4;margin-top:10px}.component-actions{display:flex;gap:7px;margin-top:12px;padding-top:10px;border-top:1px solid #3f4147}.component-actions button{border:1px solid #4b4e55;background:#313338;color:#dbdee1;border-radius:4px;padding:6px 9px;font-size:10px;transition:.18s ease}.component-actions button:hover{background:#404249;color:#fff;border-color:#6d727a}.example-list{max-height:520px;overflow:auto;padding:4px 4px 4px 0}.example-btn{border-color:#3f4147;background:#2b2d31;color:#dbdee1;border-radius:8px;padding:13px}.example-btn:hover{transform:translateX(3px);background:#35373c;border-color:#5865f2}.example-btn.active{background:#3a3d45;border-color:#5865f2;box-shadow:inset 3px 0 0 #5865f2,0 8px 18px rgba(0,0,0,.14)}
+@keyframes emojiFall{0%{transform:translate3d(0,-14vh,0) rotate(-8deg);opacity:0}8%{opacity:var(--o)}45%{transform:translate3d(var(--drift),52vh,0) rotate(150deg)}88%{opacity:var(--o)}100%{transform:translate3d(calc(var(--drift) * -.65),116vh,0) rotate(330deg);opacity:0}}
+@keyframes discordStageIn{0%{opacity:.55;transform:translateY(5px)}100%{opacity:1;transform:none}}
+@keyframes componentReveal{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@media(max-width:860px){.discord-channelbar{height:54px}.channel-icons{gap:9px}.discord-body{padding:15px 13px 28px}.discord-component{width:100%}}
+@media(prefers-reduced-motion:reduce){.falling-emoji{animation:none!important;opacity:.20!important;top:10vh}.discord-stage.sim-active{animation:none}.component-content{animation:none!important}}
+</style>
+</head>
+<body>
+<div id="starfield" aria-hidden="true"></div><div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+<div class="mobile-head">
+  <div class="mobile-brand"><img src="https://cdn.discordapp.com/avatars/1526618859644391505/17bec5b473bcf0d659ca175b257394dd.png?size=1024" alt="zShinSJ"><strong>zShinSJ</strong></div>
+  <a class="mobile-invite" href="https://discord.com/oauth2/authorize?client_id=1526618859644391505" target="_blank" rel="noopener">✦ Mời bot</a>
+</div>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand">
+    <div class="brand-mark"><img src="https://cdn.discordapp.com/avatars/1526618859644391505/17bec5b473bcf0d659ca175b257394dd.png?size=1024" alt="zShinSJ" style="width:100%;height:100%;object-fit:cover;border-radius:14px"></div>
+    <h1>zShinSJ</h1>
+    <p>Soul Cauldron · Tiên Đồ Cẩm Nang · wiki giao diện hiện đại của bot.</p>
+  </div>
+  <div class="sidebar-bot-card">
+    <div class="sidebar-bot-head">
+      <img class="sidebar-bot-avatar" src="https://cdn.discordapp.com/avatars/1526618859644391505/17bec5b473bcf0d659ca175b257394dd.png?size=1024" alt="zShinSJ">
+      <div class="sidebar-bot-copy"><strong>zShinSJ</strong><span>Discord Bot · Components V2</span></div>
+    </div>
+    <a class="sidebar-invite" href="https://discord.com/oauth2/authorize?client_id=1526618859644391505" target="_blank" rel="noopener">✦ Thêm zShinSJ vào server</a>
+  </div>
+  <nav class="nav">
+    <button class="active" data-jump="overview">✦ Tổng quan</button>
+    <button data-jump="realms">☯ Cảnh giới</button>
+    <button data-jump="commands">⌘ Lệnh Prefix</button>
+    <button data-jump="slash">◇ Lệnh Slash</button>
+    <button data-jump="simulate">▶ Mô phỏng chat</button>
+    <button data-jump="notes">⚠ Ghi chú source</button>
+  </nav>
+  <div class="side-foot">
+    <b>Prefix hiện tại:</b> <code>.</code><br>
+    <b>UI bot:</b> Components V2<br>
+    <b>Dữ liệu:</b> trích trực tiếp từ file source người dùng cung cấp.
+  </div>
+</aside>
+
+<main class="main">
+<div class="container" id="overview">
+  <section class="hero">
+    <article class="hero-card reveal-item visible">
+      <div class="eyebrow">TIÊN ĐỒ CẨM NANG · SOUL CAULDRON</div>
+      <h2>Con đường từ <span>Luyện Khí</span> đến Chuẩn Thiên Đạo.</h2>
+      <p class="hero-copy">Một wiki duy nhất cho cảnh giới, cơ chế Tu Vi, toàn bộ command, quyền sử dụng và ví dụ chat. Không dùng layout HTML thời đồ đồng. Giao diện dùng CSS hiện đại, grid, glass layers, responsive UI và JavaScript event-driven.</p>
+      <div class="pill-row">
+        <span class="pill">35 cảnh giới</span><span class="pill">71 lệnh prefix</span><span class="pill">17 lệnh slash</span><span class="pill">Components V2</span>
+      </div>
+      <div class="bot-identity">
+        <div class="bot-id-left">
+          <img class="bot-avatar-xl" src="https://cdn.discordapp.com/avatars/1526618859644391505/17bec5b473bcf0d659ca175b257394dd.png?size=1024" alt="zShinSJ">
+          <div class="bot-id-copy"><strong>zShinSJ <span class="online-dot"></span></strong><p>Bot tu tiên · Discord Components V2 · prefix <code>.</code></p></div>
+        </div>
+        <span class="pill" style="border-color:rgba(35,214,154,.15);color:#9fe9cb;background:rgba(35,214,154,.05)">ONLINE</span>
+      </div>
+      <div class="hero-actions">
+        <a class="cta-button" href="https://discord.com/oauth2/authorize?client_id=1526618859644391505" target="_blank" rel="noopener">✦ Mời zShinSJ vào server</a>
+        <button class="ghost-button" data-jump-action="simulate">▶ Xem bot trả lời</button>
+      </div>
+      <div class="hero-status-row"><span class="live-pill"><i></i> Hệ thống đang hoạt động</span><span>1526618859644391505 · Discord</span></div>
+    </article>
+    <div class="hero-side">
+      <article class="realm-focus">
+        <div class="eyebrow">ĐỈNH PHONG</div>
+        <div class="big">Chuẩn Thiên Đạo</div>
+        <p>Cảnh giới cuối cùng trong mảng <code>REALMS</code>. Yêu cầu Tu Vi tại mốc này là <b>∞</b>, nên không còn đường đột phá tiếp theo.</p>
+        <div class="hero-status-row" style="margin-top:16px"><span>☯ zShinSJ · Soul Cauldron</span></div>
+      </article>
+      <div class="stats reveal-item visible">
+        <div class="stat"><strong>35</strong><span>Cảnh giới</span></div>
+        <div class="stat"><strong>12</strong><span>Tầng / cảnh giới thường</span></div>
+        <div class="stat"><strong>71</strong><span>Prefix root</span></div>
+        <div class="stat"><strong>17</strong><span>Slash command</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel reveal" id="realms">
+    <div class="section-head">
+      <div><h3>☯ Đại Đạo Cảnh Giới</h3><p>Mỗi card hiển thị mốc cơ sở trong <code>CULTIVATION_REQ</code>, số tầng và hệ số cảnh giới dùng trong Tu Luyện.</p></div>
+    </div>
+    <div class="note" style="margin-bottom:14px">
+      <b>Cách đọc mốc Tu Vi:</b> với cảnh giới thường, bot chia thành 12 tầng. Hàm <code>getTierRequirement()</code> tính yêu cầu mỗi tầng bằng
+      <b>floor(baseReq × 10 × (tầng / (12×13/2)))</b>. Tổng mốc để đi hết 12 tầng của một cảnh giới thường tương ứng <b>baseReq × 10</b>.
+      Riêng <b>Chuẩn Thiên Đạo</b> dùng <b>Infinity</b>.
+    </div>
+    <div class="realm-rail">
+      <div class="rail-controls">
+        <div class="rail-hint"><span class="wheel">↔</span> Kéo ngang để xuyên qua toàn bộ đại cảnh giới</div>
+        <div class="rail-buttons">
+          <button class="rail-btn" id="realmPrev" aria-label="Cảnh giới trước">←</button>
+          <button class="rail-btn" id="realmNext" aria-label="Cảnh giới sau">→</button>
+        </div>
+      </div>
+      <div class="realm-grid" id="realmGrid"></div>
+    </div>
+  </section>
+
+  <section class="panel reveal" id="commands">
+    <div class="section-head">
+      <div><h3>⌘ Kho Lệnh Prefix <span class="command-count" id="commandCount"></span></h3><p>Prefix mặc định trong source là <code>.</code>. Gõ trực tiếp trong Discord, bot xử lý qua <code>messageCreate</code>.</p></div>
+    </div>
+    <div class="tools">
+      <div class="search"><input id="commandSearch" type="search" placeholder="Tìm lệnh, alias, tác dụng, quyền..."></div>
+      <div class="filter-row" id="categoryFilters"></div>
+    </div>
+    <div class="command-table-wrap">
+      <div class="command-vault" id="commandBody"></div>
+      <div class="empty" id="commandEmpty" hidden>Không tìm thấy command phù hợp. Con đường tu tiên này hiện chưa có lệnh ấy. 🫠</div>
+    </div>
+  </section>
+
+  <section class="panel reveal" id="slash">
+    <div class="section-head">
+      <div><h3>◇ Lệnh Slash</h3><p>Những lệnh được đăng ký qua Discord REST và <code>SlashCommandBuilder</code>.</p></div>
+    </div>
+    <div class="slash-grid" id="slashGrid"></div>
+  </section>
+
+  <section class="panel reveal" id="simulate">
+    <div class="section-head"><div><h3>▶ Mô phỏng: người dùng chat thì bot trả gì?</h3><p>Mô phỏng message theo cách bot hiện ra trong Discord: user gửi command → reply context → bot zShinSJ (APP) trả Components V2. Nội dung số liệu là minh hoạ.</p></div></div>
+    <div class="sim-grid">
+      <div class="chat-window discord-stage" id="chatWindow"></div>
+      <div>
+        <div class="example-list" id="exampleList"></div>
+        <div class="note" style="margin-top:11px"><b>Không phải ảnh mockup chết:</b> khung này đổi theo từng ví dụ bằng JavaScript. Nhân loại cuối cùng cũng tìm ra cách làm một cái wiki biết đổi nội dung. 🎴</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel reveal" id="notes">
+    <div class="section-head"><div><h3>⚠ Ghi chú đối chiếu source</h3><p>Những điểm trang này cố tình giữ nguyên thay vì tự ý “sửa hộ” code.</p></div></div>
+    <div class="note">
+      <b>1. Prefix:</b> source lọc <code>message.content.startsWith('.')</code>, vì vậy prefix thực tế ở bản code này là <code>.</code>.<br><br>
+      <b>2. Cảnh giới:</b> mảng <code>REALMS</code> có 35 entry, trong khi option mô tả trong <code>buffnhe</code> vẫn ghi “Cảnh Giới (Index 0-29)”. Trang wiki ưu tiên dữ liệu <code>REALMS</code> thực tế và giữ lại ghi chú này để bạn biết source còn lệch metadata.<br><br>
+      <b>3. Slash:</b> source có 17 slash command chính. Một số command slash trùng chức năng với prefix, ví dụ <code>/luyendan</code>, <code>/thongtin</code>, <code>/pay</code>.<br><br>
+      <b>4. UI:</b> bot đang dùng Components V2 với <code>ContainerBuilder</code>, <code>TextDisplayBuilder</code>, <code>SectionBuilder</code>, <code>SeparatorBuilder</code> và <code>MessageFlags.IsComponentsV2</code>. Đây là lý do phần mô phỏng chat trình bày theo kiểu panel/card thay vì Embed cổ điển.
+    </div>
+    <div class="footer">zShinSJ · Soul Cauldron · standalone HTML · no external framework required.</div>
+  </section>
+</div>
+</main>
+</div>
+
+<dialog id="cmdDialog">
+  <div class="modal">
+    <div class="modal-top">
+      <div><h3 id="modalTitle">Command</h3><span id="modalBadge" class="badge user">Mọi người</span></div>
+      <button class="icon-btn" onclick="document.getElementById('cmdDialog').close()">×</button>
+    </div>
+    <p id="modalDesc"></p>
+    <div class="codebox" id="modalSyntax"></div>
+    <p id="modalCategory"></p>
+  </div>
+</dialog>
+
+<script>
+const REALMS = [{"i": 0, "name": "Luyện Khí Kỳ", "tiers": 12, "req": "250", "total": "2.500", "mult": "1.00×", "rank": 1}, {"i": 1, "name": "Trúc Cơ Kỳ", "tiers": 12, "req": "1.000", "total": "10.000", "mult": "1.50×", "rank": 2}, {"i": 2, "name": "Kết Đan Kỳ", "tiers": 12, "req": "3.000", "total": "30.000", "mult": "2.25×", "rank": 3}, {"i": 3, "name": "Nguyên Anh Kỳ", "tiers": 12, "req": "8.000", "total": "80.000", "mult": "3.38×", "rank": 4}, {"i": 4, "name": "Hóa Thần Kỳ", "tiers": 12, "req": "20.000", "total": "200.000", "mult": "5.06×", "rank": 5}, {"i": 5, "name": "Luyện Hư Kỳ", "tiers": 12, "req": "50.000", "total": "500.000", "mult": "7.59×", "rank": 6}, {"i": 6, "name": "Hợp Thể Kỳ", "tiers": 12, "req": "120.000", "total": "1.200.000", "mult": "11.39×", "rank": 7}, {"i": 7, "name": "Đại Thừa Kỳ", "tiers": 12, "req": "300.000", "total": "3.000.000", "mult": "17.09×", "rank": 8}, {"i": 8, "name": "Độ Kiếp Kỳ", "tiers": 12, "req": "800.000", "total": "8.000.000", "mult": "25.63×", "rank": 9}, {"i": 9, "name": "Chân Tiên", "tiers": 12, "req": "2.000.000", "total": "20.000.000", "mult": "38.44×", "rank": 10}, {"i": 10, "name": "Thiên Tiên", "tiers": 12, "req": "5.000.000", "total": "50.000.000", "mult": "57.67×", "rank": 11}, {"i": 11, "name": "Kim Tiên", "tiers": 12, "req": "12.000.000", "total": "120.000.000", "mult": "86.50×", "rank": 12}, {"i": 12, "name": "Thái Ất Kim Tiên", "tiers": 12, "req": "30.000.000", "total": "300.000.000", "mult": "129.75×", "rank": 13}, {"i": 13, "name": "Đại La Kim Tiên", "tiers": 12, "req": "80.000.000", "total": "800.000.000", "mult": "194.62×", "rank": 14}, {"i": 14, "name": "Tiên Tôn", "tiers": 12, "req": "200.000.000", "total": "2.000.000.000", "mult": "291.93×", "rank": 15}, {"i": 15, "name": "Tiên Đế", "tiers": 12, "req": "500.000.000", "total": "5.000.000.000", "mult": "437.89×", "rank": 16}, {"i": 16, "name": "Chuẩn Thánh", "tiers": 12, "req": "1.200.000.000", "total": "12.000.000.000", "mult": "656.84×", "rank": 17}, {"i": 17, "name": "Hỗn Độn Thánh Nhân", "tiers": 12, "req": "3.000.000.000", "total": "30.000.000.000", "mult": "985.26×", "rank": 18}, {"i": 18, "name": "Đạo Tổ Hư Vô", "tiers": 12, "req": "8.000.000.000", "total": "80.000.000.000", "mult": "1477.89×", "rank": 19}, {"i": 19, "name": "Vô Thượng Thiên Tôn", "tiers": 12, "req": "20.000.000.000", "total": "200.000.000.000", "mult": "2216.84×", "rank": 20}, {"i": 20, "name": "Hồng Mông Tử Khí", "tiers": 12, "req": "50.000.000.000", "total": "500.000.000.000", "mult": "3325.26×", "rank": 21}, {"i": 21, "name": "Thái Cổ Thần Vương", "tiers": 12, "req": "120.000.000.000", "total": "1.200.000.000.000", "mult": "4987.89×", "rank": 22}, {"i": 22, "name": "Hỗn Độn Chí Tôn", "tiers": 12, "req": "300.000.000.000", "total": "3.000.000.000.000", "mult": "7481.83×", "rank": 23}, {"i": 23, "name": "Vô Cực Thánh Hoàng", "tiers": 12, "req": "800.000.000.000", "total": "8.000.000.000.000", "mult": "11222.74×", "rank": 24}, {"i": 24, "name": "Thái Thượng Vô Nhiên", "tiers": 12, "req": "2.000.000.000.000", "total": "20.000.000.000.000", "mult": "16834.11×", "rank": 25}, {"i": 25, "name": "Hư Không Tạo Hóa", "tiers": 12, "req": "5.000.000.000.000", "total": "50.000.000.000.000", "mult": "25251.17×", "rank": 26}, {"i": 26, "name": "Vạn Giới Chi Chủ", "tiers": 12, "req": "12.000.000.000.000", "total": "120.000.000.000.000", "mult": "37876.75×", "rank": 27}, {"i": 27, "name": "Thiên Đạo Chí Tôn", "tiers": 12, "req": "30.000.000.000.000", "total": "300.000.000.000.000", "mult": "56815.13×", "rank": 28}, {"i": 28, "name": "Hỗn Nguyên Vô Thượng", "tiers": 12, "req": "80.000.000.000.000", "total": "800.000.000.000.000", "mult": "85222.69×", "rank": 29}, {"i": 29, "name": "Vô Thượng Chí Tôn", "tiers": 12, "req": "200.000.000.000.000", "total": "2.000.000.000.000.000", "mult": "127834.04×", "rank": 30}, {"i": 30, "name": "Đại Đạo Chí Tôn", "tiers": 12, "req": "500.000.000.000.000", "total": "5.000.000.000.000.000", "mult": "191751.06×", "rank": 31}, {"i": 31, "name": "Hỗn Độn Chi Nguyên", "tiers": 12, "req": "1.200.000.000.000.000", "total": "12.000.000.000.000.000", "mult": "287626.59×", "rank": 32}, {"i": 32, "name": "Khai Thiên Tổ Thần", "tiers": 12, "req": "3.000.000.000.000.000", "total": "30.000.000.000.000.000", "mult": "431439.88×", "rank": 33}, {"i": 33, "name": "Đạo Nguyên Chi Chủ", "tiers": 12, "req": "8.000.000.000.000.000", "total": "80.000.000.000.000.000", "mult": "647159.82×", "rank": 34}, {"i": 34, "name": "Chuẩn Thiên Đạo", "tiers": 1, "req": "∞", "total": "Đỉnh phong", "mult": "970739.74×", "rank": 35}];
+const COMMANDS = [["Khởi đầu & hồ sơ", "canhgioi", "—", "Mọi người", "Mở danh sách cảnh giới, tầng và mốc Tu Vi.", ".canhgioi", "realm"], ["Khởi đầu & hồ sơ", "tu", "—", "Mọi người", "Bế quan tu luyện, nhận Tu Vi theo hệ số cảnh giới, linh căn, linh thú và buff.", ".tu", "cultivation"], ["Khởi đầu & hồ sơ", "dotpha", "—", "Mọi người", "Đột phá tự động qua các tầng đủ Tu Vi và nâng cảnh giới khi chạm đủ tầng.", ".dotpha", "breakthrough"], ["Khởi đầu & hồ sơ", "nguhanh", "—", "Mọi người", "Xem/chọn hệ Ngũ Hành: Kim, Mộc, Thủy, Hỏa, Thổ.", ".nguhanh [kim|mộc|thủy|hỏa|thổ]", "element"], ["Khởi đầu & hồ sơ", "thuctinh", "linhcan", "Mọi người", "Thức tỉnh hoặc tẩy lại Linh Căn, với nhiều loại từ Phế Linh Căn tới Hỗn Độn Thánh Thể.", ".thuctinh", "root"], ["Khởi đầu & hồ sơ", "nhapma", "—", "Mọi người", "Nhập Ma hoặc quay đầu. Nhập Ma tăng Sát Khí và hệ số Lực Chiến lâu dài.", ".nhapma", "demonic"], ["Khởi đầu & hồ sơ", "tinhhoa", "—", "Mọi người", "Tịnh hóa toàn bộ Sát Khí bằng Linh Thạch.", ".tinhhoa", "karma"], ["Khởi đầu & hồ sơ", "huyetmach", "—", "Mọi người", "Thức tỉnh Huyết Mạch Thượng Cổ, yêu cầu từ Chân Tiên.", ".huyetmach", "bloodline"], ["Khởi đầu & hồ sơ", "taytuy", "—", "Mọi người", "Tẩy Tủy, tăng hiệu quả Tu Vi theo từng cấp.", ".taytuy", "body"], ["Khởi đầu & hồ sơ", "luyenthe", "—", "Mọi người", "Luyện Thể, tăng Lực Chiến theo cấp.", ".luyenthe", "body"], ["Khởi đầu & hồ sơ", "nguyenthan", "—", "Mọi người", "Nâng Nguyên Thần, tăng Lực Chiến và thần thức.", ".nguyenthan", "spirit"], ["Khởi đầu & hồ sơ", "hoathan", "—", "Mọi người", "Xuất khiếu Hóa Thân, yêu cầu Nguyên Anh Kỳ trở lên.", ".hoathan", "spirit"], ["Khởi đầu & hồ sơ", "thanthong", "—", "Mọi người", "Mở và sử dụng Thần Thông theo cảnh giới.", ".thanthong", "skill"], ["Khởi đầu & hồ sơ", "detu", "dt", "Mọi người", "Quản lý Đệ Tử, gồm chiêu mộ và bồi dưỡng theo hệ thống Đệ Tử.", ".detu [chieumo|boiduong|...]", "sect"], ["Chiến đấu & thử thách", "sanquai", "hunt", "Mọi người", "Săn quái theo Lực Chiến, nhận Tu Vi, Linh Thạch và vật phẩm.", ".sanquai", "combat"], ["Chiến đấu & thử thách", "pk", "—", "Mọi người", "Tử chiến với người chơi khác bằng cách tag mục tiêu.", ".pk @nguoi-choi", "combat"], ["Chiến đấu & thử thách", "songtu", "—", "Mọi người", "Song tu với một Đạo Lữ được tag.", ".songtu @dao-lu", "social combat"], ["Chiến đấu & thử thách", "thienkiep", "—", "Mọi người", "Độ Thiên Kiếp khi đủ điều kiện, có rủi ro và phần thưởng theo code.", ".thienkiep", "breakthrough"], ["Chiến đấu & thử thách", "vothat", "thiluyen", "Mọi người", "Khiêu chiến Vô Cực Tháp từng tầng và nhận thưởng.", ".vothat", "tower"], ["Chiến đấu & thử thách", "phoban", "pb", "Mọi người", "Xem Phó Bản, khiêu chiến hoặc càn quét; có lượt mỗi ngày.", ".phoban [kc <id>|canquet <id>]", "dungeon"], ["Chiến đấu & thử thách", "coma", "boss", "Mọi người", "Đối đầu Cổ Ma, nhận tài nguyên hoặc chịu tổn thất.", ".coma", "boss"], ["Chiến đấu & thử thách", "chiemboc", "boique", "Mọi người", "Chiêm Bốc/Bói Quẻ, nhận một biến cố Tu Vi/Linh Thạch ngẫu nhiên.", ".chiemboc", "fortune"], ["Chiến đấu & thử thách", "thienco", "—", "Mọi người", "Gặp cơ duyên Thiên Cơ ngẫu nhiên theo cooldown.", ".thienco", "fortune"], ["Chiến đấu & thử thách", "kyngo", "—", "Mọi người", "Kỳ Ngộ ngẫu nhiên, mỗi lần có thể đem lại cơ duyên khác nhau.", ".kyngo", "event"], ["Chiến đấu & thử thách", "vienchinh", "—", "Mọi người", "Viễn Chinh: có thể khai quật khoáng thạch, tìm di tích hoặc bị phục kích.", ".vienchinh", "expedition"], ["Tài nguyên & chế tạo", "khai", "mine", "Mọi người", "Khai thác quặng dựa trên Lực Chiến và độ hiếm tài nguyên.", ".khai", "mining"], ["Tài nguyên & chế tạo", "kho", "inventory", "Mọi người", "Mở Túi Càn Khôn và xem toàn bộ vật phẩm/quặng.", ".kho", "inventory"], ["Tài nguyên & chế tạo", "ruong", "chest", "Mọi người", "Mở rương theo cooldown để nhận phần thưởng.", ".ruong", "loot"], ["Tài nguyên & chế tạo", "luyendan", "—", "Mọi người", "Luyện Đan với xác suất thành công, thất bại có thể nổ lò.", ".luyendan", "alchemy"], ["Tài nguyên & chế tạo", "renthiet", "ducbinh", "Mọi người", "Rèn Thiết để tăng cấp Pháp Bảo bằng tài nguyên.", ".renthiet", "craft"], ["Tài nguyên & chế tạo", "phuluc", "vephu", "Mọi người", "Vẽ Phù, tiêu hao Linh Thạch và nhận hiệu ứng/nguyên liệu ngẫu nhiên.", ".phuluc", "craft"], ["Tài nguyên & chế tạo", "linhmach", "chiemdaoloi", "Mọi người", "Chiếm/khai thác Linh Mạch, thu Tu Vi và Linh Thạch.", ".linhmach", "resource"], ["Tài nguyên & chế tạo", "duocdien", "trongcay", "Mọi người", "Trồng Hạt Giống và thu hoạch Dược Điền sau thời gian trưởng thành.", ".duocdien [trong|thuhoach]", "farm"], ["Tài nguyên & chế tạo", "dongphu", "dp", "Mọi người", "Khai lập/nâng cấp/thu hoạch Động Phủ theo các cấp.", ".dongphu [nangcap|thu|...]", "estate"], ["Tài nguyên & chế tạo", "boiduong", "—", "Mọi người", "Bồi dưỡng Linh Thú đang sở hữu bằng Linh Thạch.", ".boiduong", "pet"], ["Linh Thú & pháp bảo", "ivlinhthu", "ivlt", "Mọi người", "Xem kho Linh Thú và thao tác trang bị/tháo trang bị.", ".ivlinhthu [trangbi <id>|thao|...]", "pet"], ["Linh Thú & pháp bảo", "banmenh", "bm", "Mọi người", "Chọn Binh Khí Bản Mệnh: kiếm, đao, thương, cung, phiến hoặc chùy.", ".banmenh chon <kiem|dao|thuong|cung|phien|chuy>", "weapon"], ["Linh Thú & pháp bảo", "luyenphapbao", "—", "Mọi người", "Tăng cấp Pháp Bảo, cộng Lực Chiến/sát thương.", ".luyenphapbao", "weapon"], ["Tài nguyên & chế tạo", "tamphap", "—", "Mọi người", "Nâng Tâm Pháp, tăng Lực Chiến theo cấp.", ".tamphap", "upgrade"], ["Tài nguyên & chế tạo", "tranphap", "—", "Mọi người", "Nâng Trận Pháp, tăng Uy Áp/Lực Chiến.", ".tranphap", "upgrade"], ["Tài nguyên & chế tạo", "tethien", "—", "Mọi người", "Tế Thiên, tiêu hao Linh Thạch để mở một nghi lễ/cơ duyên theo code.", ".tethien", "ritual"], ["Kinh tế & minigame", "daily", "—", "Mọi người", "Điểm Danh hằng ngày, có streak và phần thưởng.", ".daily", "economy"], ["Kinh tế & minigame", "chuyen", "pay", "Mọi người", "Chuyển Linh Thạch cho người khác bằng mention.", ".chuyen @nguoi_nhan <so_luong>", "economy"], ["Kinh tế & minigame", "taixiu", "tx", "Mọi người", "Cược Tài hoặc Xỉu bằng Linh Thạch.", ".taixiu <tai|xiu> <so_tien|all>", "minigame"], ["Kinh tế & minigame", "nhiemvu", "—", "Mọi người", "Nhiệm Vụ ngày, theo dõi tiến độ và nhận thưởng.", ".nhiemvu", "quest"], ["Kinh tế & minigame", "bxh", "top", "Mọi người", "Phong Thần Bảng xếp hạng theo Lực Chiến.", ".top", "leaderboard"], ["Tông Môn & Bang Hội", "dstongmon", "ds_tm", "Mọi người", "Xem danh sách Tông Môn và mã gia nhập.", ".dstongmon", "sect"], ["Tông Môn & Bang Hội", "giatongmon", "vaotm", "Mọi người", "Gia nhập Tông Môn bằng mã.", ".giatongmon <ma_tong>", "sect"], ["Tông Môn & Bang Hội", "roitongmon", "roitm", "Thành viên Tông Môn", "Rời Tông Môn hiện tại.", ".roitongmon", "sect"], ["Tông Môn & Bang Hội", "thanhvientm", "tvtm", "Thành viên Tông Môn", "Xem danh sách thành viên Tông Môn.", ".thanhvientm", "sect"], ["Tông Môn & Bang Hội", "bxhtm", "bxh_tm", "Mọi người", "Xếp hạng Tông Môn.", ".bxhtm", "sect"], ["Tông Môn & Bang Hội", "infotm", "info_tm", "Thành viên Tông Môn", "Xem thông tin Tông Môn hiện tại.", ".infotm", "sect"], ["Tông Môn & Bang Hội", "khaison", "chieu_mo", "Tông Chủ", "Khai Sơn/chiêu mộ cho Tông Môn.", ".khaison", "sect admin"], ["Tông Môn & Bang Hội", "banghoi", "bh", "Mọi người", "Xem/quản lý trạng thái Bang Hội và các thao tác bang.", ".banghoi [tao|giai|...]", "guild"], ["Tông Môn & Bang Hội", "dsbanghoi", "dsbh", "Mọi người", "Xem danh sách Bang Hội.", ".dsbanghoi", "guild"], ["Tông Môn & Bang Hội", "giabanghoi", "—", "Mọi người", "Gia nhập Bang Hội bằng mã.", ".giabanghoi <ma_bang>", "guild"], ["Khởi đầu & hồ sơ", "satkhi", "—", "Mọi người", "Xem và kích hoạt Sát Khí; khi kích hoạt tiêu hao tối đa 30 điểm, 1 điểm = 1 phút và cho +35% Lực Chiến trong thời gian hiệu lực.", ".satkhi [khai|activate]", "karma"], ["Linh Thú & pháp bảo", "luyenthu", "—", "Mọi người", "Luyện hóa Linh Thú đang trang bị để tăng cấp và hệ số sức mạnh của thú.", ".luyenthu", "pet"], ["Khởi đầu & hồ sơ", "tuluyenphong", "tlp", "Mọi người", "Vào Tu Luyện Phòng, chơi chuỗi 8 vòng nút bấm và nhận Tu Vi/Linh Thạch theo điểm.", ".tuluyenphong", "cultivation minigame"], ["Khởi đầu & hồ sơ", "vanmenh", "vancanh", "Mọi người", "Gặp một biến cố Vận Mệnh ngẫu nhiên, có thể tăng hoặc giảm Tu Vi/Linh Thạch.", ".vanmenh", "fortune"], ["Khởi đầu & hồ sơ", "doatxa", "—", "Mọi người", "Đoạt Xá từ Nguyên Anh trở lên; mỗi lần cộng thêm hệ số Lực Chiến và tăng chi phí.", ".doatxa", "demonic"], ["Meta & quản trị", "showlink", "svlink", "Mọi người", "Xem mạng lưới server bot đang hiện diện và link mời nếu có.", ".showlink", "network"], ["Meta & quản trị", "kytich", "—", "Mọi người", "Mở bảng Kỳ Tích/Thành Tựu.", ".kytich", "achievement"], ["Meta & quản trị", "gioithieubot", "—", "Admin/Owner", "Gửi panel giới thiệu bot vào một kênh theo ID.", ".gioithieubot <channel_id>", "admin"], ["Meta & quản trị", "code", "—", "Mọi người", "Nhập reward code để nhận phần thưởng nếu code hợp lệ.", ".code <code>", "redeem"], ["Meta & quản trị", "listcode", "—", "Admin/Owner", "Xem danh sách reward code trong hệ thống.", ".listcode", "admin"], ["Meta & quản trị", "addcode", "—", "Admin/Owner", "Tạo reward code, đặt phần thưởng Linh Thạch và số lượt/người.", ".addcode <code> <linh_thach> <so_lan>", "admin"], ["Meta & quản trị", "recode", "—", "Admin/Owner", "Xóa reward code.", ".recode <code>", "admin"], ["Meta & quản trị", "testv2", "testcontainer", "Dev/Admin", "Test Components V2.", ".testv2", "dev"], ["Meta & quản trị", "reset", "—", "Admin/Owner", "Reset dữ liệu người chơi mục tiêu về trạng thái mặc định.", ".reset @user | .reset <id>", "admin"], ["Meta & quản trị", "buff", "—", "Admin/Owner", "Buff toàn diện người chơi mục tiêu lên trạng thái cực cao theo handler.", ".buff @user", "admin"]];
+const SLASH = [["menu", "Mở Thiên Thư, xem danh mục toàn bộ lệnh tu tiên.", "Mọi người"], ["thongtinlinhthu", "Xem chi tiết và trạng thái Linh Thú bản mệnh.", "Mọi người"], ["cuahanglinhthu", "Mở Tiên Thú Các để mua sắm và tiến hóa Linh Thú.", "Mọi người"], ["setup", "Tự động setup server và phân chia kênh.", "Owner/Admin"], ["vocucthap", "Khiêu chiến Vô Cực Tháp.", "Mọi người"], ["luyendan", "Mở giao diện Luyện Đan Đường.", "Mọi người"], ["nangcap", "Mở Tạo Hóa Lô nâng cấp Pháp Bảo, Tâm Pháp, Trận Pháp.", "Mọi người"], ["bicanh", "Mở Bí Cảnh Thám Hiểm.", "Mọi người"], ["thongtin", "Xem tu vi, lực chiến và tiến trình.", "Mọi người"], ["checktm", "Kiểm tra Tông Môn của người chơi được chọn.", "Admin"], ["deltm", "Xóa Tông Môn hiện tại.", "Tông Chủ"], ["laptongmon", "Khai lập Tông Môn.", "Mọi người"], ["pay", "Chuyển tài sản cho người khác.", "Mọi người"], ["shop", "Mở cửa hàng mua đồ buff.", "Mọi người"], ["ban", "Bán quặng trong kho lấy Linh Thạch.", "Mọi người"], ["trade", "Giao dịch quặng với người chơi khác.", "Mọi người"], ["buffnhe", "Điều chỉnh chỉ số/quặng cho người chơi mục tiêu.", "Admin"]];
+const CATEGORIES = ["Khởi đầu & hồ sơ", "Chiến đấu & thử thách", "Tài nguyên & chế tạo", "Linh Thú & pháp bảo", "Kinh tế & minigame", "Tông Môn & Bang Hội", "Meta & quản trị"];
+
+const $ = (s,root=document)=>root.querySelector(s);
+const $$ = (s,root=document)=>[...root.querySelectorAll(s)];
+
+function esc(v){return String(v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+
+const realmGrid = $('#realmGrid');
+realmGrid.innerHTML = REALMS.map(r=>{
+  const progress = Math.min(100, 18 + r.rank * 2.2);
+  return `<article class="realm-card reveal-item" style="--delay:${Math.min(r.rank*20,500)}ms" data-realm="${esc(r.name)} ${r.rank}">
+    <div class="realm-index-ring">${String(r.rank).padStart(2,'0')}</div>
+    <div class="realm-num">CẢNH GIỚI #${r.rank}</div>
+    <div class="realm-name">${esc(r.name)}</div>
+    <div class="realm-meta">
+      <div><span>Tầng</span><b>${r.tiers}</b></div>
+      <div><span>Mốc cơ sở</span><b>${r.req}</b></div>
+      <div><span>Tổng 12 tầng</span><b>${r.total}</b></div>
+      <div><span>Hệ số cảnh giới</span><b>${r.mult}</b></div>
+    </div>
+    <div class="realm-bar"><i style="--w:${progress}%"></i></div>
+  </article>`;
+}).join('');
+
+let activeCategory = "Tất cả";
+
+const filters = $('#categoryFilters');
+filters.innerHTML = ['Tất cả',...CATEGORIES].map(c=>`<button class="filter ${c==="Tất cả"?'active':''}" data-cat="${esc(c)}">${c}</button>`).join('');
+
+const body = $('#commandBody'), empty = $('#commandEmpty'), search = $('#commandSearch');
+
+function renderCommands(){
+  const q = search.value.trim().toLowerCase();
+  const rows = COMMANDS.filter(c=>{
+    const text = c.join(' ').toLowerCase();
+    return (activeCategory==="Tất cả" || c[0]===activeCategory) && (!q || text.includes(q));
+  });
+  $('#commandCount').textContent = `${rows.length}/${COMMANDS.length}`;
+  body.innerHTML = rows.map((c,i)=>{
+    const permText=c[3].toLowerCase();
+    const permClass = permText.includes('admin') || permText.includes('owner') ? 'admin' : 'user';
+    const iconMap={
+      'Khởi đầu & hồ sơ':'☯','Chiến đấu & thử thách':'⚔','Tài nguyên & chế tạo':'✦',
+      'Linh Thú & pháp bảo':'🐉','Kinh tế & minigame':'◇','Tông Môn & Bang Hội':'🏯','Meta & quản trị':'⌘'
+    };
+    return `<article class="command-card reveal-item" style="--delay:${Math.min(i*18,320)}ms" data-command="${esc(c[1])}" data-open-cmd="${esc(c[1])}">
+      <div class="command-top">
+        <div><div class="command-name">.${esc(c[1])}</div><div class="command-alias">alias · ${esc(c[2])}</div></div>
+        <span class="badge ${permClass}">${esc(c[3])}</span>
+      </div>
+      <div class="command-desc">${esc(c[4])}</div>
+      <div class="command-syntax">${esc(c[5])}</div>
+      <div class="command-category-strip"><span>${iconMap[c[0]]||'•'} ${esc(c[0])}</span><span>${esc(c[6])}</span></div>
+    </article>`;
+  }).join('');
+  empty.hidden=rows.length>0;
+  requestAnimationFrame(()=>{
+    $$('#commandBody .reveal-item').forEach((el,i)=>{el.style.transitionDelay=`${Math.min(i*18,320)}ms`; requestAnimationFrame(()=>el.classList.add('visible'))});
+  });
+}
+
+filters.addEventListener('click',e=>{
+  const b=e.target.closest('[data-cat]'); if(!b)return;
+  activeCategory=b.dataset.cat;
+  $$('.filter',filters).forEach(x=>x.classList.toggle('active',x===b));
+  renderCommands();
+});
+search.addEventListener('input',renderCommands);
+
+const slashGrid = $('#slashGrid');
+slashGrid.innerHTML = SLASH.map((s,i)=>`<article class="slash-item">
+  <div class="mark">/${i+1}</div>
+  <div><strong>/${esc(s[0])}</strong><span class="badge ${s[2].toLowerCase().includes('admin')?'admin':'user'}" style="margin-left:5px">${esc(s[2])}</span>
+  <p>${esc(s[1])}</p></div>
+</article>`).join('');
+
+const examples = [
+  {
+    label:'.tu',
+    user:'Sukara_Seon',
+    tag:'☠️ AX0M',
+    time:'6:07 CH',
+    accent:'#8b6cff',
+    botTitle:'🔮 BẾ QUAN TU LUYỆN · THU HOẠCH',
+    reply:' .tu',
+    markup:`
+      <div class="component-subtitle">Thiên địa linh khí ngưng tụ, chảy trôi vào từng kinh mạch...</div>
+      <div class="component-separator"></div>
+      <div class="component-block">
+        <div class="component-line">✨ <strong>Tu Vi Nhận Được:</strong> <code>+19</code> Tu Vi</div>
+        <div class="component-line">⚔️ <strong>Lực Chiến Hiện Tại:</strong> <code>4,958</code></div>
+      </div>
+      <div class="component-separator"></div>
+      <div class="component-section-title">⚙️ CẢNH GIỚI HIỆN TẠI</div>
+      <div class="component-block">
+        <div class="component-line">🟣 <strong>Cấp Cảnh:</strong> Trúc Cơ Kỳ (Tầng 10/12)</div>
+        <div class="component-line">⚡ <strong>Tiến Độ Tu Vi:</strong> 492 / 1,282</div>
+        <div class="component-progress" style="--progress:38%" data-label="38%"><span></span></div>
+      </div>
+      <div class="component-separator"></div>
+      <div class="component-section-title">📜 CHI TIẾT BUFF LINH HỘI:</div>
+      <div class="component-line">• Gốc (căn bản): <code>+11</code> Tu Vi</div>
+      <div class="component-line">• Cảnh Giới (Trúc Cơ Kỳ): <code>x1.50</code></div>
+      <div class="component-line">• Linh Căn (🟢 Ngũ Hành Linh Căn): <code>x1.2</code></div>
+      <div class="component-line">• Linh Thú (Chưa có): <code>x1.00</code></div>
+      <div class="component-separator"></div>
+      <div class="component-note">💡 Mẹo: Tu luyện là con đường dài vạn dặm. Càng lên cao mỗi chu thiên càng nhỏ giọt — hãy nuôi Linh Thú, nâng Linh Căn, và dùng Bùa Tụ Linh để bù đắp.</div>`
+  },
+  {
+    label:'.dotpha',
+    user:'Sukara_Seon',
+    tag:'☠️ AX0M',
+    time:'6:08 CH',
+    accent:'#ffd000',
+    botTitle:'✨ CẢNH GIỚI BUÔNG LỎNG ✨',
+    reply:'.dotpha',
+    markup:`
+      <div class="component-separator"></div>
+      <div class="component-line" style="font-size:16px">Chúc mừng <strong>chen_huangshan</strong> đã đột phá thành công!</div>
+      <div class="component-line" style="margin-top:4px;color:#f2f3f5">──────── ✦ ────────</div>
+      <div class="component-block" style="margin-top:8px">
+        <div class="component-line">🌟 <strong>Cảnh giới mới:</strong> Trúc Cơ Kỳ (Tầng 11/12)</div>
+        <div class="component-line">⚔️ <strong>Lực Chiến:</strong> 4,980</div>
+      </div>
+      <div class="component-separator"></div>
+      <div class="component-block">
+        <div class="component-line">🔥 <strong>Số tầng đã vượt:</strong> 1</div>
+        <div class="component-line">⚡ <strong>Tu vi tiêu hao:</strong> -1,282</div>
+      </div>
+      <div class="component-separator"></div>`
+  },
+  {
+    label:'.pk @HắcLiên',
+    user:'Sukara_Seon',
+    tag:'☠️ AX0M',
+    time:'6:09 CH',
+    accent:'#ed4245',
+    botTitle:'⚔️ KẾT QUẢ TỬ CHIẾN',
+    reply:'.pk @HắcLiên',
+    markup:`
+      <div class="component-block">
+        <div class="component-line">⚔️ <strong>Sukara_Seon:</strong> 32,500 Lực Chiến</div>
+        <div class="component-line">🩸 <strong>HắcLiên:</strong> 21,870 Lực Chiến</div>
+        <div class="component-line">💰 <strong>Chiến lợi phẩm:</strong> +340 Linh Thạch</div>
+        <div class="component-line">🏆 <strong>PK thắng:</strong> 7</div>
+      </div>`
+  }
+];
+
+const chat = $('#chatWindow');
+function showExample(i){
+  const x=examples[i];
+  chat.classList.remove('sim-active'); void chat.offsetWidth; chat.classList.add('sim-active');
+  chat.innerHTML = `
+    <div class="discord-feed">
+      <div class="discord-row">
+        <div class="discord-avatar user-avatar">🧑</div>
+        <div class="discord-body-copy">
+          <div class="discord-author"><b>${esc(x.user)}</b><span style="font-size:10px;color:#949ba4">${esc(x.tag)}</span><span class="discord-time">${esc(x.time)}</span></div>
+          <div class="discord-command"><code>${esc(x.label)}</code></div>
+        </div>
+      </div>
+      <div class="discord-reply-context">
+        <span class="reply-avatar">🧑</span><span class="reply-name">@${esc(x.user)}</span><span class="reply-handle">${esc(x.tag)}</span><span>${esc(x.reply)}</span>
+      </div>
+      <div class="discord-row" style="padding-top:2px">
+        <div class="discord-avatar bot-avatar"><img src="https://cdn.discordapp.com/avatars/1526618859644391505/17bec5b473bcf0d659ca175b257394dd.png?size=1024" alt="zShinSJ"></div>
+        <div class="discord-body-copy">
+          <div class="discord-author"><b class="bot-name">zShinSJ</b><span class="discord-badge">APP</span><span class="discord-time">${esc(x.time)}</span></div>
+          <div class="discord-component" style="--component-accent:${esc(x.accent)}">
+            <div class="component-title">${esc(x.botTitle)}</div>
+            <div id="componentContent" style="opacity:.35;margin-top:1px"><div class="component-typing"><i></i><i></i><i></i></div></div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  $$('.example-btn').forEach((b,n)=>b.classList.toggle('active',n===i));
+  setTimeout(()=>{
+    const out=$('#componentContent');
+    if(!out)return;
+    out.innerHTML=x.markup;
+    out.style.opacity='1';
+    out.style.animation='componentReveal .25s ease both';
+  },260);
+}
+$('#exampleList').innerHTML = examples.map((x,i)=>`<button class="example-btn ${i===0?'active':''}" data-example="${i}"><b>${esc(x.label)}</b><br><span style="font-size:11px;color:#8f99b1">${esc(x.botTitle)}</span></button>`).join('');
+$('#exampleList').addEventListener('click',e=>{
+  const b=e.target.closest('[data-example]'); if(b) showExample(Number(b.dataset.example));
+});
+
+body.addEventListener('click',e=>{
+  const b=e.target.closest('[data-open-cmd]'); if(!b)return;
+  const cmd=COMMANDS.find(c=>c[1]===b.dataset.openCmd); if(!cmd)return;
+  $('#modalTitle').textContent='.'+cmd[1];
+  $('#modalDesc').textContent=cmd[4];
+  $('#modalSyntax').textContent=cmd[5];
+  $('#modalCategory').innerHTML='Nhóm: <b>'+esc(cmd[0])+'</b> · Quyền: <b>'+esc(cmd[3])+'</b> · Alias: <b>'+esc(cmd[2])+'</b>';
+  $('#cmdDialog').showModal();
+});
+
+$$('.nav button').forEach(b=>b.addEventListener('click',()=>{
+  document.getElementById(b.dataset.jump).scrollIntoView({behavior:'smooth',block:'start'});
+  $$('.nav button').forEach(x=>x.classList.remove('active')); b.classList.add('active');
+}));
+$$('[data-jump-action]').forEach(b=>b.addEventListener('click',()=>document.getElementById(b.dataset.jumpAction).scrollIntoView({behavior:'smooth',block:'start'})));
+
+const observer = new IntersectionObserver(entries=>{
+  entries.filter(e=>e.isIntersecting).forEach(entry=>{
+    const id=entry.target.id;
+    $$('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.jump===id));
+  });
+},{rootMargin:'-35% 0px -55% 0px',threshold:0});
+['overview','realms','commands','slash','simulate','notes'].forEach(id=>observer.observe(document.getElementById(id)));
+
+
+/* Falling cultivation emojis behind the interface */
+const starfield=$('#starfield');
+const cultivationEmojis=['☯️','🪷','🐉','⚔️','🔮','🧿','🌀','⚡','🪙','💠','🏮','☁️','🧘','🐲','🗡️','🔱','🌌','💫','🪄'];
+for(let i=0;i<48;i++){
+  const el=document.createElement('span');
+  el.className='falling-emoji';
+  el.textContent=cultivationEmojis[Math.floor(Math.random()*cultivationEmojis.length)];
+  el.style.setProperty('--x',(Math.random()*100).toFixed(2)+'vw');
+  el.style.setProperty('--size',(13+Math.random()*22).toFixed(1)+'px');
+  el.style.setProperty('--o',(0.08+Math.random()*0.18).toFixed(2));
+  el.style.setProperty('--duration',(13+Math.random()*18).toFixed(2)+'s');
+  el.style.setProperty('--delay',(-Math.random()*24).toFixed(2)+'s');
+  el.style.setProperty('--drift',((-70+Math.random()*140).toFixed(1))+'px');
+  starfield.appendChild(el);
+}
+const cursorGlow=$('#cursorGlow');
+window.addEventListener('pointermove',e=>{
+  document.documentElement.style.setProperty('--mx',e.clientX+'px');
+  document.documentElement.style.setProperty('--my',e.clientY+'px');
+  cursorGlow.style.transform=`translate3d(${e.clientX}px,${e.clientY}px,0)`;
+},{passive:true});
+
+/* Realm deck controls */
+const realmRail=$('#realmGrid');
+const scrollRealm=dir=>realmRail.scrollBy({left:dir*320,behavior:'smooth'});
+$('#realmPrev').addEventListener('click',()=>scrollRealm(-1));
+$('#realmNext').addEventListener('click',()=>scrollRealm(1));
+let realmDrag=false, realmStart=0, realmScroll=0;
+realmRail.addEventListener('pointerdown',e=>{realmDrag=true;realmStart=e.clientX;realmScroll=realmRail.scrollLeft;realmRail.setPointerCapture(e.pointerId)});
+realmRail.addEventListener('pointermove',e=>{if(!realmDrag)return;realmRail.scrollLeft=realmScroll-(e.clientX-realmStart)*1.15});
+['pointerup','pointercancel','pointerleave'].forEach(n=>realmRail.addEventListener(n,()=>realmDrag=false));
+
+/* Reveal all motion elements */
+const revealObserver=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.08});
+$$('.reveal,.reveal-item').forEach(el=>revealObserver.observe(el));
+
+/* Lightweight hover tilt, disabled for touch */
+if(matchMedia('(pointer:fine)').matches){
+  document.addEventListener('pointermove',e=>{
+    const card=e.target.closest('.command-card'); if(!card || e.buttons) return;
+    const r=card.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
+    card.style.transform=`translateY(-5px) perspective(900px) rotateX(${-y*2.6}deg) rotateY(${x*3.2}deg)`;
+  });
+  document.addEventListener('pointerover',e=>{const c=e.target.closest('.command-card'); if(c)c.style.transition='transform .08s linear, border-color .24s, box-shadow .24s'});
+  document.addEventListener('pointerout',e=>{const c=e.target.closest('.command-card'); if(c){c.style.transition='transform .28s var(--ease),border-color .24s,box-shadow .24s';c.style.transform=''}});
+}
+
+renderCommands();
+showExample(0);
+</script>
+</body>
+</html>
